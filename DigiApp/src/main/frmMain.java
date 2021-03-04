@@ -25,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
 public class frmMain extends javax.swing.JFrame {
 
     HiloObtener elegircmb = new HiloObtener();//El hilo especialmente solo para obtener los datos
+    HiloObtenerBatalla obtenerBatalla;
 
     Digimon peleador1, peleador2; // digimons que van a pelear
     String[] columnas = {"Nombre", "Nivel"}; // columnas para la tabla
@@ -38,6 +39,7 @@ public class frmMain extends javax.swing.JFrame {
      */
     public frmMain() {
         initComponents();
+        setLocationRelativeTo(null);
         tblDigimon.setModel(model); // diseña la tabla en base a las columnas definidas
         btnBatalla.setEnabled(false); // no se puede batallar si no hay digimons peleadores
         reloj.start(); // objeto iniciado para la hora del sistema. ¡No modificar!
@@ -78,7 +80,7 @@ public class frmMain extends javax.swing.JFrame {
             } catch (IOException ex) {
                 Logger.getLogger(frmMain.class.getName()).log(Level.SEVERE, null, ex);
             }
-            lblDigimon2.setText(peleador1.getName());
+            lblDigimon2.setText(peleador2.getName());
             System.out.println("¡Peladores listos para la batalla!");
             btnElegir.setEnabled(true);
             btnBatalla.setEnabled(true);
@@ -273,25 +275,30 @@ public class frmMain extends javax.swing.JFrame {
             nivel2 = 1;
         }
         if (nivel2 < nivel1) {
-            JOptionPane.showMessageDialog(null, "Gano peleador 1");
+            JOptionPane.showMessageDialog(null, "Gano el peleador: "+peleador1.getName()+"\n"+"Puntos: "+nivel1);
         }
         if (nivel2 > nivel1) {
-            JOptionPane.showMessageDialog(null, "Gano peleador 2");
+            JOptionPane.showMessageDialog(null, "Gano el peleador: "+peleador2.getName()+"\n"+"Puntos: "+nivel2);
         }
         if (nivel2 == nivel1) {
-            JOptionPane.showMessageDialog(null, "Es un empate");
+            JOptionPane.showMessageDialog(null, "Es un empate de los peleadores: "+peleador1.getName()+" y "+peleador2.getName()+"\n"+
+                     "Puntos "+peleador1.getName()+": "+nivel1+"\n"+"Puntos "+peleador2.getName()+": "+nivel2);
         }
 
         System.out.println("¡Resultado de la batalla!");
     }//GEN-LAST:event_btnBatallaActionPerformed
 
     private void btnGetDigimonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetDigimonActionPerformed
+        
         elegircmb.start();
     }//GEN-LAST:event_btnGetDigimonActionPerformed
 
     private void btnElegirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElegirActionPerformed
+        obtenerBatalla = new HiloObtenerBatalla();
+        obtenerBatalla.start();
+        /*
         estadio = new RumbleArena(); // un nuevo estadio para cada clic en el botón de batalla
-        estadio.elegirDigimon(); // código de la clase para elegir a los digimon que pelearán
+        estadio.elegirDigimon(); // código de la clase para elegir a los digimon que pelearán*/
     }//GEN-LAST:event_btnElegirActionPerformed
 
     /**
@@ -376,6 +383,14 @@ public class frmMain extends javax.swing.JFrame {
             }
             btnGetDigimon.setEnabled(false);
         }
+    }
+    public class HiloObtenerBatalla extends Thread {
+        @Override
+        public void run() {
+        estadio = new RumbleArena(); // un nuevo estadio para cada clic en el botón de batalla
+        estadio.elegirDigimon(); // código de la clase para elegir a los digimon que pelearán
+        }
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
