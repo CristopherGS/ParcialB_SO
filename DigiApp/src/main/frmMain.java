@@ -24,6 +24,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class frmMain extends javax.swing.JFrame {
 
+    HiloObtener elegircmb = new HiloObtener();//El hilo especialmente solo para obtener los datos
+
     Digimon peleador1, peleador2; // digimons que van a pelear
     String[] columnas = {"Nombre", "Nivel"}; // columnas para la tabla
     DefaultTableModel model = new DefaultTableModel(columnas, 0); // tabla a usar
@@ -270,30 +272,21 @@ public class frmMain extends javax.swing.JFrame {
         if (peleador2.getLevel().equals("Fresh")) {
             nivel2 = 1;
         }
-        if(nivel2<nivel1){
-            JOptionPane.showMessageDialog(null,"Gano peleador 1");
+        if (nivel2 < nivel1) {
+            JOptionPane.showMessageDialog(null, "Gano peleador 1");
         }
-        if(nivel2>nivel1){
-            JOptionPane.showMessageDialog(null,"Gano peleador 2");
+        if (nivel2 > nivel1) {
+            JOptionPane.showMessageDialog(null, "Gano peleador 2");
         }
-        if(nivel2==nivel1){
-            JOptionPane.showMessageDialog(null,"Es un empate");
+        if (nivel2 == nivel1) {
+            JOptionPane.showMessageDialog(null, "Es un empate");
         }
-        
-        
+
         System.out.println("¡Resultado de la batalla!");
     }//GEN-LAST:event_btnBatallaActionPerformed
 
     private void btnGetDigimonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetDigimonActionPerformed
-        yggdrasill = new DigiWorld(model);
-        try {
-            yggdrasill.descargarDatos();
-        } catch (IOException ex) {
-            Logger.getLogger(frmMain.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(frmMain.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        btnGetDigimon.setEnabled(false);
+        elegircmb.start();
     }//GEN-LAST:event_btnGetDigimonActionPerformed
 
     private void btnElegirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElegirActionPerformed
@@ -367,6 +360,21 @@ public class frmMain extends javax.swing.JFrame {
                     Logger.getLogger(frmMain.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+        }
+    }
+
+    public class HiloObtener extends Thread {
+        @Override
+        public void run() {
+            yggdrasill = new DigiWorld(model);
+            try {
+                yggdrasill.descargarDatos();
+            } catch (IOException ex) {
+                Logger.getLogger(frmMain.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(frmMain.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            btnGetDigimon.setEnabled(false);
         }
     }
 
