@@ -270,8 +270,16 @@ public class frmMain extends javax.swing.JFrame {
         if (peleador2.getLevel().equals("Fresh")) {
             nivel2 = 1;
         }
-        // Decisión de batalla
-        // <Inserte su código aquí>
+        if(nivel2<nivel1){
+            JOptionPane.showMessageDialog(null,"Gano peleador 1");
+        }
+        if(nivel2>nivel1){
+            JOptionPane.showMessageDialog(null,"Gano peleador 2");
+        }
+        if(nivel2==nivel1){
+            JOptionPane.showMessageDialog(null,"Es un empate");
+        }
+        
         
         System.out.println("¡Resultado de la batalla!");
     }//GEN-LAST:event_btnBatallaActionPerformed
